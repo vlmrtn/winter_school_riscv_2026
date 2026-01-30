@@ -1,0 +1,25 @@
+name: Build and test on RISC-V
+
+on: [pull_request]
+
+jobs:
+  build_and_test:
+    runs-on: self-hosted
+    steps:
+    - name: Clean workspace
+      run: |
+        rm -rf ${{ github.workspace }}/*
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Build
+      run: |
+        mkdir build && cd build
+        cmake .. \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DENABLE_RVV=ON \
+          -DCMAKE_C_COMPILER=/opt/riscv/bin/riscv64-unknown-linux-gnu-gcc \
+          -DCMAKE_CXX_COMPILER=/opt/riscv/bin/riscv64-unknown-linux-gnu-g++
+        make -j$(nproc --all)
+          
