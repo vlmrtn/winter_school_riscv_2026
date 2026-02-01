@@ -13,13 +13,24 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    # - name: Download OpenCV
+    #   run: |
+    #     wget -q -O opencv.tar.gz https://drive.usercontent.google.com/download?id=1IKJsyGlUu5VLnMNglAflCk9iIkr9i7h0&export=download
+    #     sleep 5
+    #     tar -xf opencv.tar.gz
+    #     mv install /home/dkurt/opencv_install
+ 
     - name: Build
       run: |
         mkdir build && cd build
         cmake .. \
           -DCMAKE_BUILD_TYPE=Release \
+          -DOpenCV_DIR=/home/dkurt/opencv_install/lib/cmake/opencv4 \
           -DENABLE_RVV=ON \
           -DCMAKE_C_COMPILER=/opt/riscv/bin/riscv64-unknown-linux-gnu-gcc \
           -DCMAKE_CXX_COMPILER=/opt/riscv/bin/riscv64-unknown-linux-gnu-g++
         make -j$(nproc --all)
-          
+
+    - name: Run tests
+      run: |
+        ./build/tests/kmeans_tests
