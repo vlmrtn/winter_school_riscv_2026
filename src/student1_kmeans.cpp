@@ -1,5 +1,5 @@
 #include "all_kmeans.h"
-
+#include <riscv_vectors.h>
 // #include "precomp.hpp"
 // #include <opencv2/core/src/precomp.hpp>
 #include <opencv2/core/hal/hal.hpp>
