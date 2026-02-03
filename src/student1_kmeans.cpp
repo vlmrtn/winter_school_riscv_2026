@@ -1,5 +1,7 @@
 #include "all_kmeans.h"
 #include <riscv_vectors.h>
+#include <iostream>
+
 // #include "precomp.hpp"
 // #include <opencv2/core/src/precomp.hpp>
 #include <opencv2/core/hal/hal.hpp>
@@ -473,7 +475,7 @@ void printVector(vfloat32m1_t vector, size_t vl) {
     for (int q = 0; q < 8; q++) {
         mem[q] = 0;
     }
-    __riscv_vse8_v_f32m1(mem, vector, vl);
+    __riscv_vse32_v_f32m1(mem, vector, vl);
 
     for (int q = 0; q < 8; q++) {
         std::cout << "mem[" << q << "]=" << static_cast<float>(mem[q]) << std::endl;
@@ -485,7 +487,7 @@ void printVector(vfloat32m2_t vector, size_t vl) {
     for (int q = 0; q < 16; q++) {
         mem[q] = 0;
     }
-    __riscv_vse8_v_f16m2(mem, vector, vl);
+    __riscv_vse16_v_f16m2(mem, vector, vl);
 
     for (int q = 0; q < 16; q++) {
         std::cout << "mem[" << q << "]=" << static_cast<float>(mem[q]) << std::endl;
