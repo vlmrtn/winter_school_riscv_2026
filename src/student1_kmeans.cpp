@@ -1,5 +1,5 @@
 #include "all_kmeans.h"
-#include <riscv_vectors.h>
+#include <riscv_vector.h>
 #include <iostream>
 
 // #include "precomp.hpp"
@@ -509,7 +509,7 @@ void test_task() {
     __riscv_vse8_v_i8m1(data, v2, vl);
 
     for (int q = 0; q < 32; q++) {
-        std::cout << data[q] << std::endl;
+        std::cout << data[q] << static_cast<int>(data[q])<< std::endl;
     }
 }
 
