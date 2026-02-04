@@ -87,7 +87,7 @@ namespace stud2 {
                 dist_val += diff * diff;
             }
             dist[i] = dist_val;
-            sum0 += dist[i];
+            sum0 += dist[i];c
         }
 
         for (int k = 1; k < K; k++)
@@ -117,10 +117,20 @@ namespace stud2 {
                         tdist2[i + 4] + tdist2[i + 5] + tdist2[i + 6] + tdist2[i + 7];
                 }
 #endif
-                for (; i < N; i++)
+                size_t vl1 = __riscv_vsetvl_e32m4(N);
+                vfloat32m4_t temp = __riscv_vfmv_v_f_f32m4(0.f, vl1);
+                vfloat32m1_t acc = __riscv_vfmv_v_f_f32m1(0.f, vl1);
+
+                for (; i < N; i+=vl1)
                 {
-                    s += tdist2[i];
+                    size_t vl = __riscv_vsetvl_e32m4(N-i);
+                    
+                    vfloat32m4_t v1 = __riscv_vle32_v_f32m4(tdist2, vl);
+                    temp = __riscv_vadd_vv_f32m4(temp, v1, vl);
+       
                 }
+                acc = __riscv_vfredosum_vs_f32m4_f32m1(temp, acc, vl1);
+                s += __riscv_vfmv_f_s_f32m1_f32(acc);
 
                 if (s < bestSum)
                 {
@@ -176,6 +186,8 @@ namespace stud2 {
         {
             const int begin = range.start;
             const int end = range.end;
+
+
 
             for (int i = begin; i < end; ++i)
             {
