@@ -197,16 +197,6 @@ namespace {
           Perf{ true }, IsKMeansPlusPlus{ true } },
     };
 
-    static std::vector<KMeansUniversalParams> synthetic_data_kmeans_student2_u8c32_perf = {
-    { ClustersCount{ 5 }, PointsCount{ 20000 }, Attempts{ 10 },
-      Perf{ true }, IsKMeansPlusPlus{ true } },
-    { ClustersCount{ 10 }, PointsCount{ 50000 }, Attempts{ 10 },
-      Perf{ true }, IsKMeansPlusPlus{ true } },
-    { ClustersCount{ 15 }, PointsCount{ 100000 }, Attempts{ 10 },
-      Perf{ true }, IsKMeansPlusPlus{ true } },
-    };
-
-
     INSTANTIATE_TEST_SUITE_P(Accuracy, SyntheticTestKMeansStudent2_u8c16,
         testing::ValuesIn(synthetic_data_kmeans_student2_u8c32));
     INSTANTIATE_TEST_SUITE_P(Performance, SyntheticTestKMeansStudent2_u8c16,
