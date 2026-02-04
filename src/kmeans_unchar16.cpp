@@ -1,5 +1,7 @@
 #include "all_kmeans.h"
 #include <opencv2/core/hal/hal.hpp>
+#include <riscv_vector.h>
+#include <iostream>
 
 namespace stud2 {
     using namespace cv;
