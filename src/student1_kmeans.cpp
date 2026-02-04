@@ -512,8 +512,3 @@ void test_task() {
         std::cout << data[q] << static_cast<int>(data[q])<< std::endl;
     }
 }
-
-int main() {
-    test_task();
-    return 0;
-}
