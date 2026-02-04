@@ -487,7 +487,7 @@ void printVector(vfloat32m2_t vector, size_t vl) {
     for (int q = 0; q < 16; q++) {
         mem[q] = 0;
     }
-    __riscv_vse16_v_f16m2(mem, vector, vl);
+    __riscv_vse32_v_f32m2(mem, vector, vl);
 
     for (int q = 0; q < 16; q++) {
         std::cout << "mem[" << q << "]=" << static_cast<float>(mem[q]) << std::endl;
