@@ -115,7 +115,7 @@ namespace stud8 {
                     size_t vl = __riscv_vsetvl_e32m8(N - i);
 
                     vfloat32m8_t v1 = __riscv_vle32_v_f32m8(tdist2, vl);
-                    temp = __riscv_vadd_vv_f32m8(temp, v1, vl);
+                    temp = __riscv_vfadd_vv_f32m8(temp, v1, vl);
 
                 }
                 acc = __riscv_vfredosum_vs_f32m8_f32m1(temp, acc, vl1);
