@@ -67,6 +67,7 @@ namespace stud2 {
                 L2NormSqr = __riscv_vfmv_f_s_f32m1_f32(acc);
 
                 tdist2[i] = std::min(dist[i], L2NormSqr);
+                std::cout << "DONE" << std::endl;
             }
         }
 
@@ -97,7 +98,7 @@ namespace stud2 {
 
         vuint8mf2_t vdCI_uint8 = __riscv_vle8_v_u8mf2(dI, vl);
         vuint16m1_t vdCI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdI_uint8, vl);
-        vfloat32m2_t vdCI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdI_uint16, vl);
+        vfloat32m2_t vdI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdI_uint16, vl);
 
         for (int i = 0; i < N; i++)
         {
@@ -130,6 +131,7 @@ namespace stud2 {
             dist[i] = dist_val;
             sum0 += dist[i];c
         }
+        std::cout << "DONE" << std::endl;
 
         for (int k = 1; k < K; k++)
         {
@@ -251,6 +253,7 @@ namespace stud2 {
                         dist_val += diff * diff;
                     }
                     distances[i] = dist_val;
+                    std::cout << "DONE" << std::endl;
                     continue;
                 }
                 else
