@@ -50,7 +50,7 @@ namespace stud8 {
                 const unsigned char* dCI = data.ptr<unsigned char>(ci);
                 float L2NormSqr = 0.0f;
                 size_t vl = __riscv_vsetvl_e32m2(16);
-                vfloat32m2_t acc = __riscv_vfmv_v_f_f32m2(0.f, vl);
+                vfloat32m1_t acc = __riscv_vfmv_v_f_f32m1(0.f, vl);
 
                 vuint8mf2_t vdI_uint8 = __riscv_vle8_v_u8mf2(dI, vl);
                 vuint16m1_t vdI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdI_uint8, vl);
@@ -62,9 +62,9 @@ namespace stud8 {
 
                 vfloat32m2_t diff_f32 = __riscv_vfsub_vv_f32m2(vdI_f32, vdCI_f32, vl);
                 vfloat32m2_t sqr = __riscv_vfmul_vv_f32m2(diff_f32, diff_f32, vl);
-                acc = __riscv_vfredosum_vs_f32m2_f32m2(sqr, acc, vl);
+                acc = __riscv_vfredosum_vs_f32m2_f32m1(sqr, acc, vl);
 
-                L2NormSqr = __riscv_vfmv_f_s_f32m2_f32(acc);
+                L2NormSqr = __riscv_vfmv_f_s_f32m1_f32(acc);
 
                 tdist2[i] = std::min(dist[i], L2NormSqr);
                 std::cout << "DONE" << std::endl;
@@ -94,7 +94,7 @@ namespace stud8 {
         centers[0] = (unsigned)rng % N;
         const unsigned char* dCI = data.ptr<unsigned char>(centers[0]);
         size_t vl = __riscv_vsetvl_e32m2(16);
-        vfloat32m2_t acc = __riscv_vfmv_v_f_f32m2(0.f, vl);
+        vfloat32m1_t acc = __riscv_vfmv_v_f_f32m1(0.f, vl);
 
         vuint8mf2_t vdCI_uint8 = __riscv_vle8_v_u8mf2(dCI, vl);
         vuint16m1_t vdCI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdCI_uint8, vl);
@@ -124,9 +124,9 @@ namespace stud8 {
             //}
             vfloat32m2_t diff_f32 = __riscv_vfsub_vv_f32m2(vdI_f32, vdCI_f32, vl);
             vfloat32m2_t sqr = __riscv_vfmul_vv_f32m2(diff_f32, diff_f32, vl);
-            acc = __riscv_vfredosum_vs_f32m2_f32m2(sqr, acc, vl);
+            acc = __riscv_vfredosum_vs_f32m2_f32m1(sqr, acc, vl);
 
-            dist_val += __riscv_vfmv_f_s_f32m2_f32(acc);
+            dist_val += __riscv_vfmv_f_s_f32m1_f32(acc);
 
             dist[i] = dist_val;
             sum0 += dist[i];
