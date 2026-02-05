@@ -3,7 +3,7 @@
 #include <riscv_vector.h>
 #include <iostream>
 
-namespace stud2 {
+namespace stud8 {
     using namespace cv;
 
     static void generateRandomCenter(int dims, const Vec2f* box, float* center, RNG& rng)
@@ -62,9 +62,9 @@ namespace stud2 {
 
                 vfloat32m2_t diff_f32 = __riscv_vfsub_vv_f32m2(vdI_f32, vdCI_f32, vl);
                 vfloat32m2_t sqr = __riscv_vfmul_vv_f32m2(diff_f32, diff_f32, vl);
-                acc = __riscv_vfredosum_vs_f32m2_f32m1(sqr, acc, vl);
+                acc = __riscv_vfredosum_vs_f32m2_f32m2(sqr, acc, vl);
 
-                L2NormSqr = __riscv_vfmv_f_s_f32m1_f32(acc);
+                L2NormSqr = __riscv_vfmv_f_s_f32m2_f32(acc);
 
                 tdist2[i] = std::min(dist[i], L2NormSqr);
                 std::cout << "DONE" << std::endl;
@@ -96,9 +96,9 @@ namespace stud2 {
         size_t vl = __riscv_vsetvl_e32m2(16);
         vfloat32m2_t acc = __riscv_vfmv_v_f_f32m2(0.f, vl);
 
-        vuint8mf2_t vdCI_uint8 = __riscv_vle8_v_u8mf2(dI, vl);
-        vuint16m1_t vdCI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdI_uint8, vl);
-        vfloat32m2_t vdI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdI_uint16, vl);
+        vuint8mf2_t vdCI_uint8 = __riscv_vle8_v_u8mf2(dCI, vl);
+        vuint16m1_t vdCI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdCI_uint8, vl);
+        vfloat32m2_t vdCI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdCI_uint16, vl);
 
         for (int i = 0; i < N; i++)
         {
@@ -124,12 +124,12 @@ namespace stud2 {
             //}
             vfloat32m2_t diff_f32 = __riscv_vfsub_vv_f32m2(vdI_f32, vdCI_f32, vl);
             vfloat32m2_t sqr = __riscv_vfmul_vv_f32m2(diff_f32, diff_f32, vl);
-            acc = __riscv_vfredosum_vs_f32m2_f32m1(sqr, acc, vl);
+            acc = __riscv_vfredosum_vs_f32m2_f32m2(sqr, acc, vl);
 
-            dist_val += __riscv_vfmv_f_s_f32(acc);
+            dist_val += __riscv_vfmv_f_s_f32m2_f32(acc);
 
             dist[i] = dist_val;
-            sum0 += dist[i];c
+            sum0 += dist[i];
         }
         std::cout << "DONE" << std::endl;
 
@@ -169,7 +169,7 @@ namespace stud2 {
                     size_t vl = __riscv_vsetvl_e32m4(N-i);
                     
                     vfloat32m4_t v1 = __riscv_vle32_v_f32m4(tdist2, vl);
-                    temp = __riscv_vadd_vv_f32m4(temp, v1, vl);
+                    temp = __riscv_vfadd_vv_f32m4(temp, v1, vl);
        
                 }
                 acc = __riscv_vfredosum_vs_f32m4_f32m1(temp, acc, vl1);
@@ -243,13 +243,13 @@ namespace stud2 {
                         double diff = static_cast<double>(sample[j]) - static_cast<double>(center[j]);
                         dist_val += diff * diff;
 
-                        double diff = static_cast<double>(sample[j+1]) - static_cast<double>(center[j+1]);
+                        diff = static_cast<double>(sample[j+1]) - static_cast<double>(center[j+1]);
                         dist_val += diff * diff;
 
-                        double diff = static_cast<double>(sample[j+2]) - static_cast<double>(center[j+2]);
+                        diff = static_cast<double>(sample[j+2]) - static_cast<double>(center[j+2]);
                         dist_val += diff * diff;
 
-                        double diff = static_cast<double>(sample[j+3]) - static_cast<double>(center[j+3]);
+                        diff = static_cast<double>(sample[j+3]) - static_cast<double>(center[j+3]);
                         dist_val += diff * diff;
                     }
                     distances[i] = dist_val;
@@ -269,13 +269,13 @@ namespace stud2 {
                             double diff = static_cast<double>(sample[j]) - static_cast<double>(center[j]);
                             dist_val += diff * diff;
 
-                            double diff = static_cast<double>(sample[j+1]) - static_cast<double>(center[j+1]);
+                            diff = static_cast<double>(sample[j+1]) - static_cast<double>(center[j+1]);
                             dist_val += diff * diff;
 
-                            double diff = static_cast<double>(sample[j+2]) - static_cast<double>(center[j+2]);
+                            diff = static_cast<double>(sample[j+2]) - static_cast<double>(center[j+2]);
                             dist_val += diff * diff;
 
-                            double diff = static_cast<double>(sample[j+3]) - static_cast<double>(center[j+3]);
+                            diff = static_cast<double>(sample[j+3]) - static_cast<double>(center[j+3]);
                             dist_val += diff * diff;
                         }
 
@@ -572,13 +572,13 @@ namespace stud2 {
                                 double t = center[j] - old_center[j];
                                 dist += t * t;
 
-                                double t = center[j+1] - old_center[j+1];
+                                t = center[j+1] - old_center[j+1];
                                 dist += t * t;
 
-                                double t = center[j+2] - old_center[j+2];
+                                t = center[j+2] - old_center[j+2];
                                 dist += t * t;
 
-                                double t = center[j+3] - old_center[j+3];
+                                t = center[j+3] - old_center[j+3];
                                 dist += t * t;
 
                      
@@ -623,9 +623,9 @@ namespace stud2 {
 
         return best_compactness;
     }
-} // namespace stud2
+} // namespace stud8
 
-double kmeans_uchar(
+double kmeans_uchar16d(
     cv::InputArray data,
     int K,
     cv::InputOutputArray bestLabels,
@@ -634,5 +634,5 @@ double kmeans_uchar(
     int flags,
     cv::OutputArray centers
 ) {
-    return stud2::kmeans(data, K, bestLabels, criteria, attempts, flags, centers);
+    return stud8::kmeans(data, K, bestLabels, criteria, attempts, flags, centers);
 }
