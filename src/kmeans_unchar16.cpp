@@ -106,19 +106,19 @@ namespace stud8 {
                 //    s += tdist2[i];
                 //}
 
-                size_t vl1 = __riscv_vsetvl_e32m4(N);
-                vfloat32m4_t temp = __riscv_vfmv_v_f_f32m4(0.f, vl1);
+                size_t vl1 = __riscv_vsetvl_e32m8(N);
+                vfloat32m8_t temp = __riscv_vfmv_v_f_f32m8(0.f, vl1);
                 vfloat32m1_t acc = __riscv_vfmv_v_f_f32m1(0.f, vl1);
 
                 for (; i < N; i += vl1)
                 {
-                    size_t vl = __riscv_vsetvl_e32m4(N - i);
+                    size_t vl = __riscv_vsetvl_e32m8(N - i);
 
-                    vfloat32m4_t v1 = __riscv_vle32_v_f32m4(tdist2, vl);
-                    temp = __riscv_vadd_vv_f32m4(temp, v1, vl);
+                    vfloat32m8_t v1 = __riscv_vle32_v_f32m8(tdist2, vl);
+                    temp = __riscv_vadd_vv_f32m8(temp, v1, vl);
 
                 }
-                acc = __riscv_vfredosum_vs_f32m4_f32m1(temp, acc, vl1);
+                acc = __riscv_vfredosum_vs_f32m8_f32m1(temp, acc, vl1);
                 s += __riscv_vfmv_f_s_f32m1_f32(acc);
 
                 if (s < bestSum)
