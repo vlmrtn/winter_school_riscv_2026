@@ -67,7 +67,7 @@ namespace stud8 {
                 L2NormSqr = __riscv_vfmv_f_s_f32m1_f32(acc);
 
                 tdist2[i] = std::min(dist[i], L2NormSqr);
-                std::cout << "DONE" << std::endl;
+         
             }
         }
 
@@ -131,7 +131,7 @@ namespace stud8 {
             dist[i] = dist_val;
             sum0 += dist[i];
         }
-        std::cout << "DONE" << std::endl;
+      
 
         for (int k = 1; k < K; k++)
         {
@@ -253,7 +253,7 @@ namespace stud8 {
                         dist_val += diff * diff;
                     }
                     distances[i] = dist_val;
-                    std::cout << "DONE" << std::endl;
+                    
                     continue;
                 }
                 else
