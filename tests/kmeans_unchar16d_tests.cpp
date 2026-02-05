@@ -131,7 +131,7 @@ namespace {
             criteria, attempts, flags, centersRef);
 
         setRNGSeed(2026);
-        double compactnessStud = kmeans_uchar(pointsU8Shuffled, clustersCount, labels,
+        double compactnessStud = kmeans_uchar16d(pointsU8Shuffled, clustersCount, labels,
             criteria, attempts, flags, centers);
 
         std::cout << "compactnessRef: " << compactnessRef << std::endl;
@@ -147,7 +147,7 @@ namespace {
         if (perf) {
             auto start = std::chrono::high_resolution_clock::now();
             for (int i = 0; i < PERF_ITERATIONS; ++i) {
-                kmeans_uchar(pointsU8Shuffled, clustersCount, labels,
+                kmeans_uchar16d(pointsU8Shuffled, clustersCount, labels,
                     criteria, attempts, flags, centers);
             }
 
@@ -179,7 +179,7 @@ namespace {
     }
 
 
-    static std::vector<KMeansUniversalParams> synthetic_data_kmeans_student2_u8c32 = {
+    static std::vector<KMeansUniversalParams> synthetic_data_kmeans_student2_u8c16 = {
         { ClustersCount{ 5 }, PointsCount{ 1000 }, Attempts{ 10 },
           Perf{ false }, IsKMeansPlusPlus{ true } },
         { ClustersCount{ 10 }, PointsCount{ 5000 }, Attempts{ 10 },
@@ -189,7 +189,7 @@ namespace {
     };
 
 
-    static std::vector<KMeansUniversalParams> synthetic_data_kmeans_student2_u8c32_perf = {
+    static std::vector<KMeansUniversalParams> synthetic_data_kmeans_student2_u8c16_perf = {
         { ClustersCount{ 5 }, PointsCount{ 20000 }, Attempts{ 10 },
           Perf{ true }, IsKMeansPlusPlus{ true } },
         { ClustersCount{ 10 }, PointsCount{ 50000 }, Attempts{ 10 },
@@ -201,7 +201,7 @@ namespace {
     };
 
     INSTANTIATE_TEST_SUITE_P(Accuracy, SyntheticTestKMeansStudent2_u8c16,
-        testing::ValuesIn(synthetic_data_kmeans_student2_u8c32));
+        testing::ValuesIn(synthetic_data_kmeans_student2_u8c16));
     INSTANTIATE_TEST_SUITE_P(Performance, SyntheticTestKMeansStudent2_u8c16,
-        testing::ValuesIn(synthetic_data_kmeans_student2_u8c32_perf));
+        testing::ValuesIn(synthetic_data_kmeans_student2_u8c16_perf));
 } // namespace
