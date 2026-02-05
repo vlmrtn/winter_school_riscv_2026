@@ -31,43 +31,11 @@ namespace stud8 {
                 const unsigned char* dI = data.ptr<unsigned char>(i);
                 const unsigned char* dCI = data.ptr<unsigned char>(ci);
                 float L2NormSqr = 0.0f;
-                for (int j = 0; j < dims; j+=4) {
+                for (int j = 0; j < dims; j++) {
                     float diff = static_cast<float>(dI[j]) - static_cast<float>(dCI[j]);
-                    L2NormSqr += diff * diff;
-
-                    diff = static_cast<float>(dI[j+1]) - static_cast<float>(dCI[j+1]);
-                    L2NormSqr += diff * diff;
-
-                    diff = static_cast<float>(dI[j+2]) - static_cast<float>(dCI[j+2]);
-                    L2NormSqr += diff * diff;
-
-                    diff = static_cast<float>(dI[j+3]) - static_cast<float>(dCI[j+3]);
                     L2NormSqr += diff * diff;
                 }
                 tdist2[i] = std::min(dist[i], L2NormSqr);
-
-                //const unsigned char* dI = data.ptr<unsigned char>(i);
-                //const unsigned char* dCI = data.ptr<unsigned char>(ci);
-                //float L2NormSqr = 0.0f;
-                //size_t vl = __riscv_vsetvl_e32m2(16);
-                //vfloat32m1_t acc = __riscv_vfmv_v_f_f32m1(0.f, vl);
-
-                //vuint8mf2_t vdI_uint8 = __riscv_vle8_v_u8mf2(dI, vl);
-                //vuint16m1_t vdI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdI_uint8, vl);
-                //vfloat32m2_t vdI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdI_uint16, vl);
-
-                //vuint8mf2_t vdCI_uint8 = __riscv_vle8_v_u8mf2(dCI, vl);
-                //vuint16m1_t vdCI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdCI_uint8, vl);
-                //vfloat32m2_t vdCI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdCI_uint16, vl);
-
-                //vfloat32m2_t diff_f32 = __riscv_vfsub_vv_f32m2(vdI_f32, vdCI_f32, vl);
-                //vfloat32m2_t sqr = __riscv_vfmul_vv_f32m2(diff_f32, diff_f32, vl);
-                //acc = __riscv_vfredosum_vs_f32m2_f32m1(sqr, acc, vl);
-
-                //L2NormSqr = __riscv_vfmv_f_s_f32m1_f32(acc);
-
-                //tdist2[i] = std::min(dist[i], L2NormSqr);
-         
             }
         }
 
@@ -93,45 +61,18 @@ namespace stud8 {
 
         centers[0] = (unsigned)rng % N;
         const unsigned char* dCI = data.ptr<unsigned char>(centers[0]);
-        /*size_t vl = __riscv_vsetvl_e32m2(16);
-        vfloat32m1_t acc = __riscv_vfmv_v_f_f32m1(0.f, vl);
-
-        vuint8mf2_t vdCI_uint8 = __riscv_vle8_v_u8mf2(dCI, vl);
-        vuint16m1_t vdCI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdCI_uint8, vl);
-        vfloat32m2_t vdCI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdCI_uint16, vl);*/
 
         for (int i = 0; i < N; i++)
         {
             const unsigned char* dI = data.ptr<unsigned char>(i);
-
-            /*vuint8mf2_t vdI_uint8 = __riscv_vle8_v_u8mf2(dI, vl);
-            vuint16m1_t vdI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdI_uint8, vl);
-            vfloat32m2_t vdI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdI_uint16, vl);*/
-
             float dist_val = 0.0f;
-            for (int j = 0; j < dims; j+=16) {
+            for (int j = 0; j < dims; j++) {
                 float diff = static_cast<float>(dI[j]) - static_cast<float>(dCI[j]);
                 dist_val += diff * diff;
-
-                diff = static_cast<float>(dI[j+1]) - static_cast<float>(dCI[j+1]);
-                dist_val += diff * diff;
-
-                diff = static_cast<float>(dI[j+2]) - static_cast<float>(dCI[j+2]);
-                dist_val += diff * diff;
-
-                diff = static_cast<float>(dI[j+3]) - static_cast<float>(dCI[j+3]);
-                dist_val += diff * diff;
             }
-            /*vfloat32m2_t diff_f32 = __riscv_vfsub_vv_f32m2(vdI_f32, vdCI_f32, vl);
-            vfloat32m2_t sqr = __riscv_vfmul_vv_f32m2(diff_f32, diff_f32, vl);
-            acc = __riscv_vfredosum_vs_f32m2_f32m1(sqr, acc, vl);
-
-            dist_val += __riscv_vfmv_f_s_f32m1_f32(acc);*/
-
             dist[i] = dist_val;
             sum0 += dist[i];
         }
-      
 
         for (int k = 1; k < K; k++)
         {
@@ -160,21 +101,6 @@ namespace stud8 {
                         tdist2[i + 4] + tdist2[i + 5] + tdist2[i + 6] + tdist2[i + 7];
                 }
 #endif
-                /*size_t vl1 = __riscv_vsetvl_e32m4(N);
-                vfloat32m4_t temp = __riscv_vfmv_v_f_f32m4(0.f, vl1);
-                vfloat32m1_t acc = __riscv_vfmv_v_f_f32m1(0.f, vl1);
-
-                for (; i < N; i+=vl1)
-                {
-                    size_t vl = __riscv_vsetvl_e32m4(N-i);
-                    
-                    vfloat32m4_t v1 = __riscv_vle32_v_f32m4(tdist2, vl);
-                    temp = __riscv_vfadd_vv_f32m4(temp, v1, vl);
-       
-                }
-                acc = __riscv_vfredosum_vs_f32m4_f32m1(temp, acc, vl1);
-          */      /*s += __riscv_vfmv_f_s_f32m1_f32(acc);*/
-
                 for (; i < N; i++)
                 {
                     s += tdist2[i];
@@ -198,16 +124,8 @@ namespace stud8 {
         {
             const unsigned char* src = data.ptr<unsigned char>(centers[k]);
             float* dst = _out_centers.ptr<float>(k);
-            for (int j = 0; j < dims; j += 4)
-            {
+            for (int j = 0; j < dims; j++)
                 dst[j] = static_cast<float>(src[j]);
-
-                dst[j+1] = static_cast<float>(src[j+1]);
-
-                dst[j+2] = static_cast<float>(src[j+2]);
-
-                dst[j+3] = static_cast<float>(src[j+3]);
-            }
         }
     }
 
@@ -235,8 +153,6 @@ namespace stud8 {
             const int begin = range.start;
             const int end = range.end;
 
-
-
             for (int i = begin; i < end; ++i)
             {
                 const unsigned char* sample = data.ptr<unsigned char>(i);
@@ -244,21 +160,11 @@ namespace stud8 {
                 {
                     const float* center = centers.ptr<float>(labels[i]);
                     double dist_val = 0.0;
-                    for (int j = 0; j < dims; j+=4) {
+                    for (int j = 0; j < dims; j++) {
                         double diff = static_cast<double>(sample[j]) - static_cast<double>(center[j]);
-                        dist_val += diff * diff;
-
-                        diff = static_cast<double>(sample[j+1]) - static_cast<double>(center[j+1]);
-                        dist_val += diff * diff;
-
-                        diff = static_cast<double>(sample[j+2]) - static_cast<double>(center[j+2]);
-                        dist_val += diff * diff;
-
-                        diff = static_cast<double>(sample[j+3]) - static_cast<double>(center[j+3]);
                         dist_val += diff * diff;
                     }
                     distances[i] = dist_val;
-                    
                     continue;
                 }
                 else
@@ -270,17 +176,8 @@ namespace stud8 {
                     {
                         const float* center = centers.ptr<float>(k);
                         double dist_val = 0.0;
-                        for (int j = 0; j < dims; j+=4) {
+                        for (int j = 0; j < dims; j++) {
                             double diff = static_cast<double>(sample[j]) - static_cast<double>(center[j]);
-                            dist_val += diff * diff;
-
-                            diff = static_cast<double>(sample[j+1]) - static_cast<double>(center[j+1]);
-                            dist_val += diff * diff;
-
-                            diff = static_cast<double>(sample[j+2]) - static_cast<double>(center[j+2]);
-                            dist_val += diff * diff;
-
-                            diff = static_cast<double>(sample[j+3]) - static_cast<double>(center[j+3]);
                             dist_val += diff * diff;
                         }
 
@@ -387,40 +284,19 @@ namespace stud8 {
         {
             {
                 const unsigned char* sample = data.ptr<unsigned char>(0);
-                for (int j = 0; j < dims; j+=4) {
+                for (int j = 0; j < dims; j++) {
                     float val = static_cast<float>(sample[j]);
                     box[j] = Vec2f(val, val);
-
-                    val = static_cast<float>(sample[j+1]);
-                    box[j+1] = Vec2f(val, val);
-
-                    val = static_cast<float>(sample[j+2]);
-                    box[j+2] = Vec2f(val, val);
-
-                    val = static_cast<float>(sample[j+3]);
-                    box[j+3] = Vec2f(val, val);
                 }
             }
             for (int i = 1; i < N; i++)
             {
                 const unsigned char* sample = data.ptr<unsigned char>(i);
-                for (int j = 0; j < dims; j+=4)
+                for (int j = 0; j < dims; j++)
                 {
                     float v = static_cast<float>(sample[j]);
                     box[j][0] = std::min(box[j][0], v);
                     box[j][1] = std::max(box[j][1], v);
-
-                    v = static_cast<float>(sample[j+1]);
-                    box[j+1][0] = std::min(box[j+1][0], v);
-                    box[j+1][1] = std::max(box[j+1][1], v);
-
-                    v = static_cast<float>(sample[j+2]);
-                    box[j+2][0] = std::min(box[j+2][0], v);
-                    box[j+2][1] = std::max(box[j+2][1], v);
-
-                    v = static_cast<float>(sample[j+3]);
-                    box[j+3][0] = std::min(box[j+3][0], v);
-                    box[j+3][1] = std::max(box[j+3][1], v);
                 }
             }
         }
@@ -458,16 +334,8 @@ namespace stud8 {
                         const unsigned char* sample = data.ptr<unsigned char>(i);
                         int k = labels[i];
                         float* center = centers.ptr<float>(k);
-                        for (int j = 0; j < dims; j+=4)
-                        {
+                        for (int j = 0; j < dims; j++)
                             center[j] += static_cast<float>(sample[j]);
-
-                            center[j+1] += static_cast<float>(sample[j+1]);
-
-                            center[j+2] += static_cast<float>(sample[j+2]);
-
-                            center[j+3] += static_cast<float>(sample[j+3]);
-                        }
                         counters[k]++;
                     }
 
@@ -492,33 +360,17 @@ namespace stud8 {
                         float* base_center = centers.ptr<float>(max_k);
                         float* _base_center = temp.ptr<float>(); // normalized
                         float scale = 1.f / counters[max_k];
-                        for (int j = 0; j < dims; j += 4)
-                        {
+                        for (int j = 0; j < dims; j++)
                             _base_center[j] = base_center[j] * scale;
 
-                            _base_center[j+1] = base_center[j+1] * scale;
-
-                            _base_center[j+2] = base_center[j+2] * scale;
-
-                            _base_center[j+3] = base_center[j+3] * scale;
-                        }
                         for (int i = 0; i < N; i++)
                         {
                             if (labels[i] != max_k)
                                 continue;
                             const unsigned char* sample = data.ptr<unsigned char>(i);
                             double dist_val = 0.0;
-                            for (int j = 0; j < dims; j+=4) {
+                            for (int j = 0; j < dims; j++) {
                                 double diff = static_cast<double>(sample[j]) - static_cast<double>(_base_center[j]);
-                                dist_val += diff * diff;
-
-                                diff = static_cast<double>(sample[j+1]) - static_cast<double>(_base_center[j+1]);
-                                dist_val += diff * diff;
-
-                                diff = static_cast<double>(sample[j+2]) - static_cast<double>(_base_center[j+2]);
-                                dist_val += diff * diff;
-
-                                diff = static_cast<double>(sample[j+3]) - static_cast<double>(_base_center[j+3]);
                                 dist_val += diff * diff;
                             }
 
@@ -535,19 +387,10 @@ namespace stud8 {
 
                         const unsigned char* sample = data.ptr<unsigned char>(farthest_i);
                         float* cur_center = centers.ptr<float>(k);
-                        for (int j = 0; j < dims; j+=4)
+                        for (int j = 0; j < dims; j++)
                         {
                             base_center[j] -= static_cast<float>(sample[j]);
                             cur_center[j] += static_cast<float>(sample[j]);
-
-                            base_center[j+1] -= static_cast<float>(sample[j+1]);
-                            cur_center[j+1] += static_cast<float>(sample[j+1]);
-
-                            base_center[j+2] -= static_cast<float>(sample[j+2]);
-                            cur_center[j+2] += static_cast<float>(sample[j+2]);
-
-                            base_center[j+3] -= static_cast<float>(sample[j+3]);
-                            cur_center[j+3] += static_cast<float>(sample[j+3]);
                         }
                     }
 
@@ -557,36 +400,17 @@ namespace stud8 {
                         CV_Assert(counters[k] != 0);
 
                         float scale = 1.f / counters[k];
-                        for (int j = 0; j < dims; j+=4)
-                        {
+                        for (int j = 0; j < dims; j++)
                             center[j] *= scale;
-
-                            center[j+1] *= scale;
-
-                            center[j+2] *= scale;
-
-                            center[j+3] *= scale;
-                        }
 
                         if (iter > 0)
                         {
                             double dist = 0;
                             const float* old_center = old_centers.ptr<float>(k);
-                            for (int j = 0; j < dims; j+=4)
+                            for (int j = 0; j < dims; j++)
                             {
                                 double t = center[j] - old_center[j];
                                 dist += t * t;
-
-                                t = center[j+1] - old_center[j+1];
-                                dist += t * t;
-
-                                t = center[j+2] - old_center[j+2];
-                                dist += t * t;
-
-                                t = center[j+3] - old_center[j+3];
-                                dist += t * t;
-
-                     
                             }
                             max_center_shift = std::max(max_center_shift, dist);
                         }
