@@ -195,6 +195,8 @@ namespace {
           Perf{ true }, IsKMeansPlusPlus{ true } },
         { ClustersCount{ 15 }, PointsCount{ 100000 }, Attempts{ 10 },
           Perf{ true }, IsKMeansPlusPlus{ true } },
+        { ClustersCount{ 7 }, PointsCount{ 1000000 }, Attempts{ 10 },
+          Perf{ true }, IsKMeansPlusPlus{ true } }
     };
 
     INSTANTIATE_TEST_SUITE_P(Accuracy, SyntheticTestKMeansStudent2_u8c16,
