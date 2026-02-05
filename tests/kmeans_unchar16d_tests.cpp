@@ -70,6 +70,7 @@ namespace {
         const int minValue = 0;
         const int maxValue = 128;
         const int dimsNum = 16;
+        cv::setNumThreads(1);
 
         Mat points(pointsCount, dimsNum, CV_32F);
         Mat pointsU8(pointsCount, dimsNum, CV_8U);
