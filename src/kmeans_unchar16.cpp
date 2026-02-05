@@ -35,13 +35,13 @@ namespace stud8 {
                     float diff = static_cast<float>(dI[j]) - static_cast<float>(dCI[j]);
                     L2NormSqr += diff * diff;
 
-                    float diff = static_cast<float>(dI[j+1]) - static_cast<float>(dCI[j+1]);
+                    diff = static_cast<float>(dI[j+1]) - static_cast<float>(dCI[j+1]);
                     L2NormSqr += diff * diff;
 
-                    float diff = static_cast<float>(dI[j+2]) - static_cast<float>(dCI[j+2]);
+                    diff = static_cast<float>(dI[j+2]) - static_cast<float>(dCI[j+2]);
                     L2NormSqr += diff * diff;
 
-                    float diff = static_cast<float>(dI[j+3]) - static_cast<float>(dCI[j+3]);
+                    diff = static_cast<float>(dI[j+3]) - static_cast<float>(dCI[j+3]);
                     L2NormSqr += diff * diff;
                 }
                 tdist2[i] = std::min(dist[i], L2NormSqr);
@@ -93,33 +93,33 @@ namespace stud8 {
 
         centers[0] = (unsigned)rng % N;
         const unsigned char* dCI = data.ptr<unsigned char>(centers[0]);
-        size_t vl = __riscv_vsetvl_e32m2(16);
+        /*size_t vl = __riscv_vsetvl_e32m2(16);
         vfloat32m1_t acc = __riscv_vfmv_v_f_f32m1(0.f, vl);
 
         vuint8mf2_t vdCI_uint8 = __riscv_vle8_v_u8mf2(dCI, vl);
         vuint16m1_t vdCI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdCI_uint8, vl);
-        vfloat32m2_t vdCI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdCI_uint16, vl);
+        vfloat32m2_t vdCI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdCI_uint16, vl);*/
 
         for (int i = 0; i < N; i++)
         {
             const unsigned char* dI = data.ptr<unsigned char>(i);
 
-            vuint8mf2_t vdI_uint8 = __riscv_vle8_v_u8mf2(dI, vl);
+            /*vuint8mf2_t vdI_uint8 = __riscv_vle8_v_u8mf2(dI, vl);
             vuint16m1_t vdI_uint16 = __riscv_vwcvtu_x_x_v_u16m1(vdI_uint8, vl);
-            vfloat32m2_t vdI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdI_uint16, vl);
+            vfloat32m2_t vdI_f32 = __riscv_vfwcvt_f_xu_v_f32m2(vdI_uint16, vl);*/
 
             float dist_val = 0.0f;
             for (int j = 0; j < dims; j+=16) {
                 float diff = static_cast<float>(dI[j]) - static_cast<float>(dCI[j]);
                 dist_val += diff * diff;
 
-                float diff = static_cast<float>(dI[j+1]) - static_cast<float>(dCI[j+1]);
+                diff = static_cast<float>(dI[j+1]) - static_cast<float>(dCI[j+1]);
                 dist_val += diff * diff;
 
-                float diff = static_cast<float>(dI[j+2]) - static_cast<float>(dCI[j+2]);
+                diff = static_cast<float>(dI[j+2]) - static_cast<float>(dCI[j+2]);
                 dist_val += diff * diff;
 
-                float diff = static_cast<float>(dI[j+3]) - static_cast<float>(dCI[j+3]);
+                diff = static_cast<float>(dI[j+3]) - static_cast<float>(dCI[j+3]);
                 dist_val += diff * diff;
             }
             /*vfloat32m2_t diff_f32 = __riscv_vfsub_vv_f32m2(vdI_f32, vdCI_f32, vl);
@@ -174,6 +174,7 @@ namespace stud8 {
                 }
                 acc = __riscv_vfredosum_vs_f32m4_f32m1(temp, acc, vl1);
           */      /*s += __riscv_vfmv_f_s_f32m1_f32(acc);*/
+
                 for (; i < N; i++)
                 {
                     s += tdist2[i];
