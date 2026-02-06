@@ -108,7 +108,7 @@ namespace stud8 {
 
                 size_t vl1 = __riscv_vsetvl_e32m4(N);
                 vfloat32m4_t temp1 = __riscv_vfmv_v_f_f32m4(0.f, vl1);
-                float32m4_t temp2 = __riscv_vfmv_v_f_f32m4(0.f, vl1);
+                vfloat32m4_t temp2 = __riscv_vfmv_v_f_f32m4(0.f, vl1);
 
                 vfloat32m1_t acc1 = __riscv_vfmv_v_f_f32m1(0.f, vl1);
                 vfloat32m1_t acc2 = __riscv_vfmv_v_f_f32m1(0.f, vl1);
