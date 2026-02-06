@@ -3,6 +3,7 @@ set(KMEANS_TEST_SOURCES # m.b. will be better use GLOB ...
     kmeans_uchar4d_tests.cpp
     kmeans_uchar32d_tests.cpp
     kmeans_unchar16d_tests.cpp
+    new_kmeans_uchar32d_tests.cpp
 )
 
 foreach(test_file ${KMEANS_TEST_SOURCES})

@@ -41,3 +41,13 @@ double kmeans_uchar16d(
     int flags,
     cv::OutputArray centers
 );
+
+double kmeans_uchar32d(
+    cv::InputArray data,
+    int K,
+    cv::InputOutputArray bestLabels,
+    cv::TermCriteria criteria,
+    int attempts,
+    int flags,
+    cv::OutputArray centers
+);
