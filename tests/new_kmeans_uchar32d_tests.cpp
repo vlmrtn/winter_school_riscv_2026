@@ -198,7 +198,7 @@ namespace {
     };
 
     INSTANTIATE_TEST_SUITE_P(Accuracy, SyntheticTestKMeansStudent2_u8c32_new,
-        testing::ValuesIn(synthetic_data_kmeans_student2_u8c32));
+        testing::ValuesIn(synthetic_data_kmeans_student2_u8c32_new));
     INSTANTIATE_TEST_SUITE_P(Performance, SyntheticTestKMeansStudent2_u8c32_new,
-        testing::ValuesIn(synthetic_data_kmeans_student2_u8c32_perf));
+        testing::ValuesIn(synthetic_data_kmeans_student2_u8c32_new_perf));
 } // namespace
